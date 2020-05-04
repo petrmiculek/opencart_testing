@@ -4,6 +4,7 @@ from behave import *
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
 
 # use_step_matcher("re")
 from selenium.webdriver.support.wait import WebDriverWait
@@ -11,6 +12,19 @@ from selenium.webdriver.support.wait import WebDriverWait
 main_page_url = "http://pat.fit.vutbr.cz:8072"
 orders_count = 0
 delay = 5  # seconds, hopefully; for explicit waiting on element loading
+
+
+# don't worry about the name, it will all make sense later
+class Patiently:
+    wait_var = None
+
+    # def __init__(self, context):
+
+    @classmethod
+    def wait(cls, browser):
+        if cls.wait_var is None:
+            cls.wait_var = WebDriverWait(browser, delay)
+        return cls.wait_var
 
 
 def ensure_user_is_logged_in(context):
@@ -36,12 +50,26 @@ def ensure_user_is_logged_in(context):
 
 
 def count_user_orders(context):
-    
+
+    wait = Patiently().wait(context.browser)
     ensure_user_is_logged_in(context)
 
     context.browser.get(main_page_url)
-    context.browser.find_element(By.CSS_SELECTOR, ".fa-user").click()
-    context.browser.find_element(By.CSS_SELECTOR, ".dropdown-menu > li:nth-child(2) > a").click()
+
+    elements = [
+        # (By.CSS_SELECTOR, ".list-inline .dropdown-toggle"),  # ".fa-user"
+        # (By.CSS_SELECTOR, ".dropdown-menu > li:nth-child(2) > a"),
+        (By.XPATH, "//div[@id=\'top-links\']/ul/li[2]/a/span[2]"),
+        (By.XPATH, "//div[@id=\'top-links\']/ul/li[2]/ul/li[2]/a"),
+    ]
+
+    try:
+        for elem in elements:
+            curr_elem = wait.until(EC.visibility_of_element_located(elem))
+            curr_elem.click()
+    except Exception as exc:
+        pass
+    pass
     """
     count = 0
     try:
@@ -137,28 +165,37 @@ def step_impl(context):
     """
     :type context: behave.runner.Context
     """
-    context.browser.get("http://pat.fit.vutbr.cz:8072/")
+    wait = Patiently().wait(context.browser)
 
-    # add item to cart
-    context.browser.find_element(By.LINK_TEXT, "iPhone").click()
-    context.browser.find_element(By.ID, "button-cart").click()
+    context.browser.get(main_page_url)
 
-    # fill in order details
+    # sequence of elements to click on
+    elements = [
+        # add item to cart
+        (By.LINK_TEXT, "iPhone"),
+        (By.ID, "button-cart"),
+
+        # fill in order details
+        (By.XPATH, "//div[@id=\'cart\']/button"),
+        (By.XPATH, "//div[@id=\'cart\']/ul/li[2]/div/p/a[2]/strong/i"),
+        (By.ID, "button-payment-address"),
+        (By.ID, "button-shipping-address"),
+        (By.ID, "button-shipping-method"),
+        (By.NAME, "agree"),
+        (By.ID, "button-payment-method"),
+
+        # submit order
+        (By.ID, "button-confirm"),
+        (By.LINK_TEXT, "Continue")
+    ]
+
     try:
-        context.browser.find_element(By.XPATH, "//div[@id=\'cart\']/button").click()
-        context.browser.find_element(By.XPATH, "//div[@id=\'cart\']/ul/li[2]/div/p/a[2]/strong/i").click()
-        WebDriverWait(context.browser, delay).until()
-        context.browser.find_element(By.ID, "button-payment-address").click()
-        context.browser.find_element(By.ID, "button-shipping-address").click()
-        context.browser.find_element(By.ID, "button-shipping-method").click()
-        context.browser.find_element(By.NAME, "agree").click()
-        context.browser.find_element(By.ID, "button-payment-method").click()
+        for elem in elements:
+            curr_elem = wait.until(EC.element_to_be_clickable(elem))
+            curr_elem.click()
     except Exception as exc:
         pass
-
-    # submit order
-    context.browser.find_element(By.ID, "button-confirm").click()
-    context.browser.find_element(By.LINK_TEXT, "Continue").click()
+    pass
 
 
 @step("User's Order History will be N plus 1 Orders long")
@@ -166,13 +203,27 @@ def step_impl(context):
     """
     :type context: behave.runner.Context
     """
+    """
     context.browser.get(main_page_url)
-    context.browser.find_element(By.CSS_SELECTOR, ".list-inline .dropdown-toggle").click()
-    context.browser.find_element(By.LINK_TEXT, "Order History").click()
+    
+    elements = [
+        (By.CSS_SELECTOR, ".list-inline .dropdown-toggle"),
+        (By.CSS_SELECTOR, ".dropdown-menu > li:nth-child(2) > a"),
+    ]
 
-    new_orders = count_user_orders(context) - orders_count
-    assert new_orders == 1,\
-        "Creating an order resulted in {} new orders (!= 1)".format(new_orders)
+    try:
+        for elem in elements:
+            curr_elem = Patiently.wait().until(EC.element_to_be_clickable(elem))
+            curr_elem.click()
+    except Exception as exc:
+        pass
+    pass
+    """
+
+    new_orders = count_user_orders(context)
+
+    assert new_orders - orders_count == 1,\
+        "Creating an order resulted in {} new orders (there were {} before)".format(new_orders, orders_count)
 
 
 @given("There is a valid order form filled up to the Delivery Method step")
