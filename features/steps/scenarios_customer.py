@@ -28,7 +28,6 @@ class Patiently:
 
 
 def ensure_user_is_logged_in(context):
-
     context.browser.get(main_page_url)
     context.browser.find_element(By.CSS_SELECTOR, ".fa-user").click()
 
@@ -50,7 +49,6 @@ def ensure_user_is_logged_in(context):
 
 
 def count_user_orders(context):
-
     wait = Patiently().wait(context.browser)
     ensure_user_is_logged_in(context)
 
@@ -222,7 +220,7 @@ def step_impl(context):
 
     new_orders = count_user_orders(context)
 
-    assert new_orders - orders_count == 1,\
+    assert new_orders - orders_count == 1, \
         "Creating an order resulted in {} new orders (there were {} before)".format(new_orders, orders_count)
 
 
@@ -231,7 +229,43 @@ def step_impl(context):
     """
     :type context: behave.runner.Context
     """
-    raise NotImplementedError(u'STEP: Given There is a valid order form filled up to the Delivery Method step')
+    wait = Patiently().wait(context.browser)
+
+    ensure_user_is_logged_in(context)
+
+    context.browser.get(main_page_url)
+
+    # sequence of elements to click on
+    elements = [
+        # add item to cart
+        (By.LINK_TEXT, "iPhone"),
+        (By.ID, "button-cart"),
+
+        # fill in order details
+        (By.XPATH, "//div[@id=\'cart\']/button"),
+        (By.XPATH, "//div[@id=\'cart\']/ul/li[2]/div/p/a[2]/strong/i"),
+        (By.ID, "button-payment-address"),
+        (By.ID, "button-shipping-address"),
+
+        # if you want to move these two down to Then, change the JS selector
+        (By.ID, "button-shipping-method"),
+        (By.NAME, "agree"),
+        # no longer needed, thanks to JS
+        # (By.XPATH, "//p[3]/textarea")
+    ]
+
+    try:
+        for elem in elements:
+            curr_elem = wait.until(EC.element_to_be_clickable(elem))
+            curr_elem.click()
+    except Exception as exc:
+        pass
+    pass
+
+    """
+    w.ith open("order_note.txt") as file:
+        very_long_note = file.read()
+    """
 
 
 @when("Malicious user inputs the shipping method and a very long comment about their order before proceeding")
@@ -239,8 +273,9 @@ def step_impl(context):
     """
     :type context: behave.runner.Context
     """
-    raise NotImplementedError(
-        u'STEP: When Malicious user inputs the shipping method and a very long comment about their order before proceeding')
+
+    context.browser.execute_script("var x = document.querySelectorAll('p:nth-child(4) > .form-control');"
+                                   "for (let e of x) { e.value = 'AAAA'.repeat(3000000); }")
 
 
 @then("Order will proceed or warn user about the comment-too-long problem")
@@ -248,7 +283,24 @@ def step_impl(context):
     """
     :type context: behave.runner.Context
     """
-    raise NotImplementedError(u'STEP: Then Order will proceed or warn user about the comment-too-long problem')
+    wait = Patiently().wait(context.browser)
+
+    elements2 = [
+
+        (By.ID, "button-payment-method"),
+
+        # submit order
+        (By.ID, "button-confirm"),
+        (By.LINK_TEXT, "Continue")
+    ]
+
+    try:
+        for elem in elements2:
+            curr_elem = wait.until(EC.element_to_be_clickable(elem))
+            curr_elem.click()
+    except Exception as exc:
+        assert 0 == 1, "failed"
+    pass
 
 
 @given("Purchase a Gift Certificate page is open")
