@@ -1,0 +1,21 @@
+{
+  "id": "965c5e59-52b0-4884-8d10-7a64fe70da13",
+  "version": "2.0",
+  "name": "its-proj2",
+  "url": "",
+  "tests": [{
+    "id": "54346add-af4b-4267-9545-a39823fe68bd",
+    "name": "Untitled",
+    "commands": []
+  }],
+  "suites": [{
+    "id": "6e80e21b-67ea-4f8c-bcc4-3ff715e7d543",
+    "name": "Default Suite",
+    "persistSession": false,
+    "parallel": false,
+    "timeout": 300,
+    "tests": ["54346add-af4b-4267-9545-a39823fe68bd"]
+  }],
+  "urls": [],
+  "plugins": []
+}
