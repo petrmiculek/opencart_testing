@@ -1,21 +1,26 @@
-import sys
-
 from behave import *
-from selenium import webdriver
-from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 
 # use_step_matcher("re")
-from selenium.webdriver.support.wait import WebDriverWait
 
 main_page_url = "http://pat.fit.vutbr.cz:8072"
+# main_page_url = "https://demo.opencart.com/"  # testing on public demo
+user_email_registered = "petr.miculek@gmail.com"
+
 orders_count = 0
-delay = 5  # seconds, hopefully; for explicit waiting on element loading
+
+# supposed to be constants, #define ... ...
+click = 0
+send_keys = 1
+clear = 2
 
 
 # don't worry about the name, it will all make sense later
 class Patiently:
+
+    delay = 15  # seconds, hopefully; for explicit waiting on element loading
     wait_var = None
 
     # def __init__(self, context):
@@ -23,11 +28,12 @@ class Patiently:
     @classmethod
     def wait(cls, browser):
         if cls.wait_var is None:
-            cls.wait_var = WebDriverWait(browser, delay)
+            from selenium.webdriver.support.wait import WebDriverWait
+            cls.wait_var = WebDriverWait(browser, cls.delay)
         return cls.wait_var
 
 
-def ensure_user_is_logged_in(context):
+def ensure_user_logged_in(context):
     context.browser.get(main_page_url)
     context.browser.find_element(By.CSS_SELECTOR, ".fa-user").click()
 
@@ -39,18 +45,18 @@ def ensure_user_is_logged_in(context):
 
     context.browser.find_element(By.ID, "input-email").click()
 
-    context.browser.find_element(By.ID, "input-email").send_keys("petr.miculek@gmail.com")
+    context.browser.find_element(By.ID, "input-email").send_keys(user_email_registered)
 
     context.browser.find_element(By.ID, "input-password").send_keys("verysecurepassword")
 
     context.browser.find_element(By.XPATH, "//input[@value=\'Login\']").click()
 
-    # context.browser.find_element(By.CSS_SELECTOR, ".fa-home").click()
+    context.browser.find_element(By.CSS_SELECTOR, ".fa-home").click()
 
 
 def count_user_orders(context):
     wait = Patiently().wait(context.browser)
-    ensure_user_is_logged_in(context)
+    ensure_user_logged_in(context)
 
     context.browser.get(main_page_url)
 
@@ -92,6 +98,17 @@ def count_user_orders(context):
 
     except NoSuchElementException:
         return 0
+
+
+def ensure_user_logged_out(context):
+    context.browser.find_element(By.CSS_SELECTOR, ".list-inline .dropdown-toggle").click()
+
+    try:
+        context.browser.find_element(By.LINK_TEXT, "Logout").click()
+        context.browser.find_element(By.LINK_TEXT, "Continue").click()
+    except NoSuchElementException:
+        # already logged out
+        return
 
 
 # ===========================================================================
@@ -152,7 +169,7 @@ def step_impl(context):
     """
     :type context: behave.runner.Context
     """
-    ensure_user_is_logged_in(context)
+    ensure_user_logged_in(context)
 
     global orders_count
     orders_count = count_user_orders(context)
@@ -218,6 +235,15 @@ def step_impl(context):
     pass
     """
 
+    # todo below
+    """
+    I cannot count the orders based on one table, as there might be more pages to the table
+    
+    The solution would be to generate a random string, put it as the order comment
+    and then check if it is there. (There is no better order attribute that guarantees
+    that the order is the one we have just made)
+    """
+
     new_orders = count_user_orders(context)
 
     assert new_orders - orders_count == 1, \
@@ -231,7 +257,7 @@ def step_impl(context):
     """
     wait = Patiently().wait(context.browser)
 
-    ensure_user_is_logged_in(context)
+    ensure_user_logged_in(context)
 
     context.browser.get(main_page_url)
 
@@ -273,9 +299,9 @@ def step_impl(context):
     """
     :type context: behave.runner.Context
     """
-
+    # reached the error behavior at 3 million, could not avoid timeout that way
     context.browser.execute_script("var x = document.querySelectorAll('p:nth-child(4) > .form-control');"
-                                   "for (let e of x) { e.value = 'AAAA'.repeat(3000000); }")
+                                   "for (let e of x) { e.value = 'AAAA'.repeat(1000000); }")
 
 
 @then("Order will proceed or warn user about the comment-too-long problem")
@@ -286,7 +312,6 @@ def step_impl(context):
     wait = Patiently().wait(context.browser)
 
     elements2 = [
-
         (By.ID, "button-payment-method"),
 
         # submit order
@@ -298,17 +323,24 @@ def step_impl(context):
         for elem in elements2:
             curr_elem = wait.until(EC.element_to_be_clickable(elem))
             curr_elem.click()
-    except Exception as exc:
-        assert 0 == 1, "failed"
+    except TimeoutException as exc:
+        assert 0 == 1, "timeout reached"
     pass
 
 
-@given("Purchase a Gift Certificate page is open")
+# ==================================================
+#  Purchase a Gift Certificate
+
+
+@given("Registered user has opened the Purchase a Gift Certificate page")
 def step_impl(context):
     """
     :type context: behave.runner.Context
     """
-    raise NotImplementedError(u'STEP: Given Purchase a Gift Certificate page is open')
+    ensure_user_logged_in(context)
+
+    context.browser.get(main_page_url)
+    context.browser.find_element(By.LINK_TEXT, "Gift Certificates").click()
 
 
 @when("Gift certificate purchase Form is filled and submitted")
@@ -316,7 +348,53 @@ def step_impl(context):
     """
     :type context: behave.runner.Context
     """
-    raise NotImplementedError(u'STEP: When Gift certificate purchase Form is filled and submitted')
+
+    wait = Patiently.wait(context.browser)
+
+    elements = [
+        (By.ID, "input-to-name", clear, None),
+        (By.ID, "input-to-name", click, None),
+        (By.ID, "input-to-name", send_keys, "Friend"),
+
+        (By.ID, "input-to-email", clear, None),
+        (By.ID, "input-to-email", click, None),
+        (By.ID, "input-to-email", send_keys, "xmicul08@stud.fit.vutbr.cz"),
+
+        (By.ID, "input-from-name", clear, None),
+        (By.ID, "input-from-name", click, None),
+        (By.ID, "input-from-name", send_keys, "Your Friend Name Surname"),
+
+        (By.ID, "input-from-email", clear, None),
+        (By.ID, "input-from-email", click, None),
+        (By.ID, "input-from-email", send_keys, "petr.miculek@gmail.com"),
+
+        (By.XPATH, "(//input[@name=\'voucher_theme_id\'])[3]", click, None),
+
+        (By.ID, "input-message", clear, None),
+        (By.ID, "input-message", click, None),
+        (By.ID, "input-message", send_keys, "Happy end of exams term!"),
+
+        (By.ID, "input-amount", click, None),
+        (By.CSS_SELECTOR, ".pull-right:nth-child(1)", click, None),
+        (By.NAME, "agree", click, None),
+        (By.CSS_SELECTOR, ".btn-primary", click, None)
+
+    ]
+    try:
+        for elem in elements:
+            curr_elem = (elem[0], elem[1])
+            if elem[2] == click:
+                curr_elem = wait.until(EC.element_to_be_clickable(curr_elem))
+                curr_elem.click()
+            elif elem[2] == send_keys:
+                curr_elem = wait.until(EC.visibility_of_element_located(curr_elem))
+                curr_elem.send_keys(elem[3])
+            elif elem[2] == clear:
+                curr_elem = wait.until(EC.visibility_of_element_located(curr_elem))
+                curr_elem.clear()
+    except Exception as exc:
+        pass
+    pass
 
 
 @then("User is redirected back to the store")
@@ -324,9 +402,20 @@ def step_impl(context):
     """
     :type context: behave.runner.Context
     """
-    raise NotImplementedError(u'STEP: Then User is redirected back to the store')
+    shown_text = ""
+
+    try:
+        shown_text = context.browser.find_element(By.CSS_SELECTOR, "b:nth-child(1)").text
+        pass
+    except Exception as exc:
+        pass
+
+    "https://demo.opencart.com/index.php?route=account/account"
+
+    assert shown_text != "Warning", "Page seems to have crashed"
 
 
+# todo use or delete
 @step("Admin Gift Vouchers section will show the gift certificate")
 def step_impl(context):
     """

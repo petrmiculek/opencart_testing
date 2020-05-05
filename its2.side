@@ -2,7 +2,7 @@
   "id": "81102525-a7f9-41e5-b37b-fb1f71573bd9",
   "version": "2.0",
   "name": "its2",
-  "url": "http://pat.fit.vutbr.cz:8072",
+  "url": "http://pat.fit.vutbr.cz:8072/admin/index.php",
   "tests": [{
     "id": "d0777336-e08b-4f90-81c3-a5d72dac6479",
     "name": "failed",
@@ -124,7 +124,7 @@
     }]
   }, {
     "id": "d76ae620-796c-499b-b434-7d4a8b59bff0",
-    "name": "Make an order (Non-Registered user)",
+    "name": "User Make an order (Non-Registered)",
     "commands": [{
       "id": "f8b708a3-62cd-4cc9-9b93-b00fb8ae4cf6",
       "comment": "",
@@ -583,13 +583,6 @@
       "targets": [],
       "value": ""
     }, {
-      "id": "4fe4f2fb-ae87-40d9-b362-0fed901ebb3b",
-      "comment": "",
-      "command": "setWindowSize",
-      "target": "918x750",
-      "targets": [],
-      "value": ""
-    }, {
       "id": "d1cdc2b5-b7b4-4bfc-a09e-15f1b0adb40a",
       "comment": "",
       "command": "click",
@@ -968,7 +961,7 @@
     }]
   }, {
     "id": "e00c5893-e04a-49e9-a551-ed0b14d108a7",
-    "name": "Search",
+    "name": "User Search  product",
     "commands": [{
       "id": "df1a2777-2004-4e37-be99-2fd873e95783",
       "comment": "",
@@ -1016,7 +1009,7 @@
     }]
   }, {
     "id": "9ae38a45-0350-4859-9016-ef3438630581",
-    "name": "Login",
+    "name": "User Login",
     "commands": [{
       "id": "6b05fd5b-48ee-4e92-8145-0275014c0d3f",
       "comment": "",
@@ -1113,7 +1106,7 @@
     }]
   }, {
     "id": "f2c4d0fa-4fee-4d39-bebe-89f19fd55c29",
-    "name": "Make an order (Registered user)",
+    "name": "User Make an order (Registered)",
     "commands": [{
       "id": "91791204-3f71-4216-92df-a6c5e1bf8ae1",
       "comment": "",
@@ -1330,7 +1323,7 @@
     }]
   }, {
     "id": "4f0b7e8e-f25b-4d9a-8833-8ac197369abe",
-    "name": "Check order history",
+    "name": "User Check order history",
     "commands": [{
       "id": "f170c910-8b88-4166-a643-9be644518f7c",
       "comment": "",
@@ -1531,6 +1524,597 @@
       ],
       "value": ""
     }]
+  }, {
+    "id": "0a336d35-bb32-4786-9142-87b896fa9ed3",
+    "name": "Purchase gift certificate",
+    "commands": [{
+      "id": "02128d35-a2dc-424f-aa02-1d464aba68f5",
+      "comment": "",
+      "command": "open",
+      "target": "/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "9b25e555-ffc9-4b44-bcaa-37b589916212",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Gift Certificates",
+      "targets": [
+        ["linkText=Gift Certificates", "linkText"],
+        ["css=.col-sm-3:nth-child(3) li:nth-child(2) > a", "css:finder"],
+        ["xpath=//a[contains(text(),'Gift Certificates')]", "xpath:link"],
+        ["xpath=//a[@href='http://pat.fit.vutbr.cz:8072/index.php?route=account/voucher']", "xpath:href"],
+        ["xpath=//div[3]/ul/li[2]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Gift Certificates')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "f36bbe47-1ba7-464e-9da9-ac39fb80fc56",
+      "comment": "",
+      "command": "click",
+      "target": "id=input-to-name",
+      "targets": [
+        ["id=input-to-name", "id"],
+        ["name=to_name", "name"],
+        ["css=#input-to-name", "css:finder"],
+        ["xpath=//input[@id='input-to-name']", "xpath:attributes"],
+        ["xpath=//div[@id='content']/form/div/div/input", "xpath:idRelative"],
+        ["xpath=//form/div/div/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "ed472ca5-ac28-4f2a-96b2-72a245dfa2fd",
+      "comment": "",
+      "command": "type",
+      "target": "id=input-to-name",
+      "targets": [
+        ["id=input-to-name", "id"],
+        ["name=to_name", "name"],
+        ["css=#input-to-name", "css:finder"],
+        ["xpath=//input[@id='input-to-name']", "xpath:attributes"],
+        ["xpath=//div[@id='content']/form/div/div/input", "xpath:idRelative"],
+        ["xpath=//form/div/div/input", "xpath:position"]
+      ],
+      "value": "Friend"
+    }, {
+      "id": "6f477574-7dab-4238-98d7-c56f90f13565",
+      "comment": "",
+      "command": "type",
+      "target": "id=input-to-email",
+      "targets": [
+        ["id=input-to-email", "id"],
+        ["name=to_email", "name"],
+        ["css=#input-to-email", "css:finder"],
+        ["xpath=//input[@id='input-to-email']", "xpath:attributes"],
+        ["xpath=//div[@id='content']/form/div[2]/div/input", "xpath:idRelative"],
+        ["xpath=//form/div[2]/div/input", "xpath:position"]
+      ],
+      "value": "xmicul08@stud.fit.vutbr.cz"
+    }, {
+      "id": "218da0b6-7b86-43c2-8a6c-130cee4e14e0",
+      "comment": "",
+      "command": "click",
+      "target": "id=input-from-name",
+      "targets": [
+        ["id=input-from-name", "id"],
+        ["name=from_name", "name"],
+        ["css=#input-from-name", "css:finder"],
+        ["xpath=//input[@id='input-from-name']", "xpath:attributes"],
+        ["xpath=//div[@id='content']/form/div[3]/div/input", "xpath:idRelative"],
+        ["xpath=//div[3]/div/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "15fdfb45-7533-4069-acb6-eeae0de845aa",
+      "comment": "",
+      "command": "type",
+      "target": "id=input-from-name",
+      "targets": [
+        ["id=input-from-name", "id"],
+        ["name=from_name", "name"],
+        ["css=#input-from-name", "css:finder"],
+        ["xpath=//input[@id='input-from-name']", "xpath:attributes"],
+        ["xpath=//div[@id='content']/form/div[3]/div/input", "xpath:idRelative"],
+        ["xpath=//div[3]/div/input", "xpath:position"]
+      ],
+      "value": "Your Friend Name Surname"
+    }, {
+      "id": "472d999c-f269-47c2-81e8-de3a03a68762",
+      "comment": "",
+      "command": "click",
+      "target": "id=input-from-email",
+      "targets": [
+        ["id=input-from-email", "id"],
+        ["name=from_email", "name"],
+        ["css=#input-from-email", "css:finder"],
+        ["xpath=//input[@id='input-from-email']", "xpath:attributes"],
+        ["xpath=//div[@id='content']/form/div[4]/div/input", "xpath:idRelative"],
+        ["xpath=//div[4]/div/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "d798f365-0974-4c1b-8c1d-0017b4aaea8a",
+      "comment": "",
+      "command": "type",
+      "target": "id=input-from-email",
+      "targets": [
+        ["id=input-from-email", "id"],
+        ["name=from_email", "name"],
+        ["css=#input-from-email", "css:finder"],
+        ["xpath=//input[@id='input-from-email']", "xpath:attributes"],
+        ["xpath=//div[@id='content']/form/div[4]/div/input", "xpath:idRelative"],
+        ["xpath=//div[4]/div/input", "xpath:position"]
+      ],
+      "value": "petr.miculek@gmail.com"
+    }, {
+      "id": "a094db2e-6325-4264-8776-4e3fdff45f1f",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=(//input[@name='voucher_theme_id'])[3]",
+      "targets": [
+        ["css=.radio:nth-child(3) input", "css:finder"],
+        ["xpath=(//input[@name='voucher_theme_id'])[3]", "xpath:attributes"],
+        ["xpath=//div[@id='content']/form/div[5]/div/div[3]/label/input", "xpath:idRelative"],
+        ["xpath=//div[3]/label/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "11c01834-6e3d-48bb-926f-5a1f561648e7",
+      "comment": "",
+      "command": "click",
+      "target": "id=input-message",
+      "targets": [
+        ["id=input-message", "id"],
+        ["name=message", "name"],
+        ["css=#input-message", "css:finder"],
+        ["xpath=//textarea[@id='input-message']", "xpath:attributes"],
+        ["xpath=//div[@id='content']/form/div[6]/div/textarea", "xpath:idRelative"],
+        ["xpath=//textarea", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "a294e4ab-4d5d-48e5-99d7-96b3d0cd78b8",
+      "comment": "",
+      "command": "type",
+      "target": "id=input-message",
+      "targets": [
+        ["id=input-message", "id"],
+        ["name=message", "name"],
+        ["css=#input-message", "css:finder"],
+        ["xpath=//textarea[@id='input-message']", "xpath:attributes"],
+        ["xpath=//div[@id='content']/form/div[6]/div/textarea", "xpath:idRelative"],
+        ["xpath=//textarea", "xpath:position"]
+      ],
+      "value": "Happy end of exams term!"
+    }, {
+      "id": "d8d7629f-3e3a-4fd1-a0e8-f84e1a4dfa76",
+      "comment": "",
+      "command": "click",
+      "target": "id=input-amount",
+      "targets": [
+        ["id=input-amount", "id"],
+        ["name=amount", "name"],
+        ["css=#input-amount", "css:finder"],
+        ["xpath=//input[@id='input-amount']", "xpath:attributes"],
+        ["xpath=//div[@id='content']/form/div[7]/div/input", "xpath:idRelative"],
+        ["xpath=//div[7]/div/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "0322c5e8-674b-45f8-8a97-93c207476ecd",
+      "comment": "",
+      "command": "click",
+      "target": "id=input-amount",
+      "targets": [
+        ["id=input-amount", "id"],
+        ["name=amount", "name"],
+        ["css=#input-amount", "css:finder"],
+        ["xpath=//input[@id='input-amount']", "xpath:attributes"],
+        ["xpath=//div[@id='content']/form/div[7]/div/input", "xpath:idRelative"],
+        ["xpath=//div[7]/div/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "a12d529d-3c9e-4517-a8b0-4797feff67a5",
+      "comment": "",
+      "command": "click",
+      "target": "css=.pull-right:nth-child(1)",
+      "targets": [
+        ["css=.pull-right:nth-child(1)", "css:finder"],
+        ["xpath=//div[@id='content']/form/div[8]/div", "xpath:idRelative"],
+        ["xpath=//div[8]/div", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "a4657ecb-85c5-4f55-9470-bdd62b9c4f86",
+      "comment": "",
+      "command": "click",
+      "target": "name=agree",
+      "targets": [
+        ["name=agree", "name"],
+        ["css=.pull-right > input:nth-child(1)", "css:finder"],
+        ["xpath=//input[@name='agree']", "xpath:attributes"],
+        ["xpath=//div[@id='content']/form/div[8]/div/input", "xpath:idRelative"],
+        ["xpath=//div[8]/div/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "2fbd78e7-16c2-4631-ae58-f14d94f748a8",
+      "comment": "",
+      "command": "click",
+      "target": "css=.btn-primary",
+      "targets": [
+        ["css=.btn-primary", "css:finder"],
+        ["xpath=//input[@value='Continue']", "xpath:attributes"],
+        ["xpath=//div[@id='content']/form/div[8]/div/input[2]", "xpath:idRelative"],
+        ["xpath=//div/input[2]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "52fb1f34-51a2-41da-a3c3-e49822f831ce",
+      "comment": "",
+      "command": "click",
+      "target": "css=b:nth-child(1)",
+      "targets": [
+        ["css=b:nth-child(1)", "css:finder"],
+        ["xpath=//b", "xpath:position"],
+        ["xpath=//b[contains(.,'Warning')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "6a6b9cce-9ad7-40e3-9a07-be6bf420a791",
+      "comment": "",
+      "command": "click",
+      "target": "css=header",
+      "targets": [
+        ["css=header", "css:finder"],
+        ["xpath=//header", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "cad5e811-5efb-434c-beba-b743a6786506",
+      "comment": "",
+      "command": "doubleClick",
+      "target": "css=b:nth-child(1)",
+      "targets": [
+        ["css=b:nth-child(1)", "css:finder"],
+        ["xpath=//b", "xpath:position"],
+        ["xpath=//b[contains(.,'Warning')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "33a59679-b414-4258-93c5-8f7dd7fc8ed8",
+      "comment": "",
+      "command": "",
+      "target": "",
+      "targets": [],
+      "value": ""
+    }]
+  }, {
+    "id": "b1c76d6e-75b3-4852-8ba4-0326952b5416",
+    "name": "User Logout",
+    "commands": [{
+      "id": "bfa0fb37-2a58-4a02-a41c-fc62e53e2729",
+      "comment": "",
+      "command": "open",
+      "target": "/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "ccb10141-3373-4cc2-a4cb-0168475e6110",
+      "comment": "",
+      "command": "click",
+      "target": "css=.list-inline .dropdown-toggle",
+      "targets": [
+        ["css=.list-inline .dropdown-toggle", "css:finder"],
+        ["xpath=//div[@id='top-links']/ul/li[2]/a", "xpath:idRelative"],
+        ["xpath=//a[@href='http://pat.fit.vutbr.cz:8072/index.php?route=account/account']", "xpath:href"],
+        ["xpath=//li[2]/a", "xpath:position"],
+        ["xpath=//a[contains(.,' ')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "bc27d8cb-033c-4147-a8a8-fd98fa859fb8",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Logout",
+      "targets": [
+        ["linkText=Logout", "linkText"],
+        ["css=.dropdown-menu > li:nth-child(5) > a", "css:finder"],
+        ["xpath=//a[contains(text(),'Logout')]", "xpath:link"],
+        ["xpath=//div[@id='top-links']/ul/li[2]/ul/li[5]/a", "xpath:idRelative"],
+        ["xpath=//a[@href='http://pat.fit.vutbr.cz:8072/index.php?route=account/logout']", "xpath:href"],
+        ["xpath=//li[5]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Logout')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "028032fa-18f2-4cc0-8871-8f1edc6eb018",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Continue",
+      "targets": [
+        ["linkText=Continue", "linkText"],
+        ["css=.btn-primary", "css:finder"],
+        ["xpath=//a[contains(text(),'Continue')]", "xpath:link"],
+        ["xpath=//div[@id='content']/div/div/a", "xpath:idRelative"],
+        ["xpath=(//a[@href='http://pat.fit.vutbr.cz:8072/index.php?route=common/home'])[3]", "xpath:href"],
+        ["xpath=//div[2]/div/div/div/div/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Continue')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }]
+  }, {
+    "id": "05e5d72f-f3ac-4ebe-a0b8-de6e52af163e",
+    "name": "Admin login",
+    "commands": [{
+      "id": "615a0564-146c-4c39-8db2-0cb03435eaf4",
+      "comment": "",
+      "command": "open",
+      "target": "http://pat.fit.vutbr.cz:8072/admin/index.php",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "66988d9f-1390-4cb3-b959-7ba0614d4993",
+      "comment": "",
+      "command": "click",
+      "target": "id=input-username",
+      "targets": [
+        ["id=input-username", "id"],
+        ["name=username", "name"],
+        ["css=#input-username", "css:finder"],
+        ["xpath=//input[@id='input-username']", "xpath:attributes"],
+        ["xpath=//div[@id='content']/div/div/div/div/div[2]/form/div/div/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "700db04f-50e2-479f-867d-560d1a44524e",
+      "comment": "",
+      "command": "type",
+      "target": "id=input-username",
+      "targets": [
+        ["id=input-username", "id"],
+        ["name=username", "name"],
+        ["css=#input-username", "css:finder"],
+        ["xpath=//input[@id='input-username']", "xpath:attributes"],
+        ["xpath=//div[@id='content']/div/div/div/div/div[2]/form/div/div/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": "admin"
+    }, {
+      "id": "2c8fadcb-4ecd-45d4-973e-5bf63b0b5510",
+      "comment": "",
+      "command": "click",
+      "target": "id=input-password",
+      "targets": [
+        ["id=input-password", "id"],
+        ["name=password", "name"],
+        ["css=#input-password", "css:finder"],
+        ["xpath=//input[@id='input-password']", "xpath:attributes"],
+        ["xpath=//div[@id='content']/div/div/div/div/div[2]/form/div[2]/div/input", "xpath:idRelative"],
+        ["xpath=//div[2]/div/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "70628580-b76d-412b-931f-0ec010a64362",
+      "comment": "",
+      "command": "type",
+      "target": "id=input-password",
+      "targets": [
+        ["id=input-password", "id"],
+        ["name=password", "name"],
+        ["css=#input-password", "css:finder"],
+        ["xpath=//input[@id='input-password']", "xpath:attributes"],
+        ["xpath=//div[@id='content']/div/div/div/div/div[2]/form/div[2]/div/input", "xpath:idRelative"],
+        ["xpath=//div[2]/div/input", "xpath:position"]
+      ],
+      "value": "admin"
+    }, {
+      "id": "91d123a7-9fd0-42b2-9b46-037daaf18c5f",
+      "comment": "",
+      "command": "click",
+      "target": "css=.btn",
+      "targets": [
+        ["css=.btn", "css:finder"],
+        ["xpath=//button[@type='submit']", "xpath:attributes"],
+        ["xpath=//div[@id='content']/div/div/div/div/div[2]/form/div[3]/button", "xpath:idRelative"],
+        ["xpath=//button", "xpath:position"],
+        ["xpath=//button[contains(.,' Login')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }]
+  }, {
+    "id": "43cf6c60-238a-496f-ad0d-6f725fefe01b",
+    "name": "User Change email",
+    "commands": [{
+      "id": "cad38041-705b-4a7c-8ea3-32f5211e77cb",
+      "comment": "",
+      "command": "open",
+      "target": "http://pat.fit.vutbr.cz:8072/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "9963a25e-806e-4e2f-92cf-77333f252cee",
+      "comment": "",
+      "command": "click",
+      "target": "css=.caret",
+      "targets": [
+        ["css=.caret", "css:finder"],
+        ["xpath=//div[@id='top-links']/ul/li[2]/a/span[2]", "xpath:idRelative"],
+        ["xpath=//span[2]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "9dfd8d6b-98e5-4659-bb66-7b62c9abdcf4",
+      "comment": "",
+      "command": "click",
+      "target": "css=.dropdown-menu > li:nth-child(1) > a",
+      "targets": [
+        ["linkText=My Account", "linkText"],
+        ["css=.dropdown-menu > li:nth-child(1) > a", "css:finder"],
+        ["xpath=//a[contains(text(),'My Account')]", "xpath:link"],
+        ["xpath=//div[@id='top-links']/ul/li[2]/ul/li/a", "xpath:idRelative"],
+        ["xpath=(//a[@href='http://pat.fit.vutbr.cz:8072/index.php?route=account/account'])[2]", "xpath:href"],
+        ["xpath=//li[2]/ul/li/a", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "99680ba9-66b9-458e-a7e9-627f165e634b",
+      "comment": "",
+      "command": "click",
+      "target": "css=#content > .list-unstyled:nth-child(2) > li:nth-child(1) > a",
+      "targets": [
+        ["linkText=Edit your account information", "linkText"],
+        ["css=#content > .list-unstyled:nth-child(2) > li:nth-child(1) > a", "css:finder"],
+        ["xpath=//a[contains(text(),'Edit your account information')]", "xpath:link"],
+        ["xpath=//div[@id='content']/ul/li/a", "xpath:idRelative"],
+        ["xpath=//a[@href='http://pat.fit.vutbr.cz:8072/index.php?route=account/edit']", "xpath:href"],
+        ["xpath=//div[2]/div/div/ul/li/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Edit your account information')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "d8aa48c1-8655-4b11-bfd2-606f7c1ffd98",
+      "comment": "",
+      "command": "click",
+      "target": "id=input-email",
+      "targets": [
+        ["id=input-email", "id"],
+        ["name=email", "name"],
+        ["css=#input-email", "css:finder"],
+        ["xpath=//input[@id='input-email']", "xpath:attributes"],
+        ["xpath=//div[@id='content']/form/fieldset/div[3]/div/input", "xpath:idRelative"],
+        ["xpath=//div[3]/div/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "847ab18e-3ca9-4585-8785-be1ba66bbc89",
+      "comment": "",
+      "command": "type",
+      "target": "id=input-email",
+      "targets": [
+        ["id=input-email", "id"],
+        ["name=email", "name"],
+        ["css=#input-email", "css:finder"],
+        ["xpath=//input[@id='input-email']", "xpath:attributes"],
+        ["xpath=//div[@id='content']/form/fieldset/div[3]/div/input", "xpath:idRelative"],
+        ["xpath=//div[3]/div/input", "xpath:position"]
+      ],
+      "value": "petr.miculek@gmail.com"
+    }, {
+      "id": "3ea4dae2-e32f-4bf2-a810-c5b08a2b54b5",
+      "comment": "",
+      "command": "click",
+      "target": "css=.btn-primary",
+      "targets": [
+        ["css=.btn-primary", "css:finder"],
+        ["xpath=//input[@value='Continue']", "xpath:attributes"],
+        ["xpath=//div[@id='content']/form/div/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[2]/input", "xpath:position"]
+      ],
+      "value": ""
+    }]
+  }, {
+    "id": "5bf11e49-49b1-4a3c-a3e9-968685df5237",
+    "name": "Admin check order email",
+    "commands": [{
+      "id": "b04e204d-5704-4448-a603-1caac8690a04",
+      "comment": "",
+      "command": "open",
+      "target": "http://pat.fit.vutbr.cz:8072/admin/index.php",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "5661e99f-1ced-4c28-8dff-2c4bd981f4a9",
+      "comment": "",
+      "command": "click",
+      "target": "id=input-username",
+      "targets": [
+        ["id=input-username", "id"],
+        ["name=username", "name"],
+        ["css=#input-username", "css:finder"],
+        ["xpath=//input[@id='input-username']", "xpath:attributes"],
+        ["xpath=//div[@id='content']/div/div/div/div/div[2]/form/div/div/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "6163f582-1a18-4c43-88d6-584252b557e9",
+      "comment": "",
+      "command": "type",
+      "target": "id=input-username",
+      "targets": [
+        ["id=input-username", "id"],
+        ["name=username", "name"],
+        ["css=#input-username", "css:finder"],
+        ["xpath=//input[@id='input-username']", "xpath:attributes"],
+        ["xpath=//div[@id='content']/div/div/div/div/div[2]/form/div/div/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": "admin"
+    }, {
+      "id": "1400ebc4-9947-48c1-b5a1-e796801b177b",
+      "comment": "",
+      "command": "type",
+      "target": "id=input-password",
+      "targets": [
+        ["id=input-password", "id"],
+        ["name=password", "name"],
+        ["css=#input-password", "css:finder"],
+        ["xpath=//input[@id='input-password']", "xpath:attributes"],
+        ["xpath=//div[@id='content']/div/div/div/div/div[2]/form/div[2]/div/input", "xpath:idRelative"],
+        ["xpath=//div[2]/div/input", "xpath:position"]
+      ],
+      "value": "admin"
+    }, {
+      "id": "6d2a4a19-4b6a-43f1-b820-3788e154fe62",
+      "comment": "",
+      "command": "click",
+      "target": "css=.btn",
+      "targets": [
+        ["css=.btn", "css:finder"],
+        ["xpath=//button[@type='submit']", "xpath:attributes"],
+        ["xpath=//div[@id='content']/div/div/div/div/div[2]/form/div[3]/button", "xpath:idRelative"],
+        ["xpath=//div[3]/button", "xpath:position"],
+        ["xpath=//button[contains(.,' Login')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "0d58a222-3c11-4e78-ad1e-0ee4319138ef",
+      "comment": "",
+      "command": "click",
+      "target": "css=tr:nth-child(1) .btn",
+      "targets": [
+        ["css=tr:nth-child(1) .btn", "css:finder"],
+        ["xpath=//div[@id='content']/div[2]/div[3]/div[2]/div/div[2]/table/tbody/tr/td[6]/a", "xpath:idRelative"],
+        ["xpath=(//a[@href='http://pat.fit.vutbr.cz:8072/admin/index.php?route=sale/order/info&token=zRNjn5rogCjDDYfg6JSPUwuDV6oiTvHh&order_id=51'])[2]", "xpath:href"],
+        ["xpath=//td[6]/a", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "36d77f37-d657-4316-afc3-664257e08bfa",
+      "comment": "click user name",
+      "command": "click",
+      "target": "css=.col-md-4:nth-child(2) tr:nth-child(1) a",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "678bd8dc-58a6-4975-9516-d5a225f4d8e4",
+      "comment": "",
+      "command": "click",
+      "target": "css=tr:nth-child(3) a",
+      "targets": [
+        ["linkText=petr.miculek@gmail.com", "linkText"],
+        ["css=tr:nth-child(3) a", "css:finder"],
+        ["xpath=//a[contains(text(),'petr.miculek@gmail.com')]", "xpath:link"],
+        ["xpath=//div[@id='content']/div[2]/div[3]/div[2]/div/table/tbody/tr[3]/td[2]/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, 'mailto:petr.miculek@gmail.com')]", "xpath:href"],
+        ["xpath=//tr[3]/td[2]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'petr.miculek@gmail.com')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }]
   }],
   "suites": [{
     "id": "799e998a-29f1-400b-8b60-45e7c52389a8",
@@ -1540,6 +2124,6 @@
     "timeout": 300,
     "tests": ["d0777336-e08b-4f90-81c3-a5d72dac6479"]
   }],
-  "urls": ["http://pat.fit.vutbr.cz:8072/"],
+  "urls": ["http://pat.fit.vutbr.cz:8072/", "https://demo.opencart.com/", "http://pat.fit.vutbr.cz:8072/admin/index.php"],
   "plugins": []
 }

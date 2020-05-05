@@ -25,7 +25,7 @@ def before_all(context):
     """
     # main_page_url = 'http://pat.fit.vutbr.cz:8072/'
 
-    # context.browser.implicitly_wait(15)
+    context.browser.implicitly_wait(100)
     context.browser.get(main_page_url)
 
 

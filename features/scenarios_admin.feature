@@ -19,8 +19,8 @@ Feature: Admin performs various use cases
 
 	Given Registered User Bob had made an order X
 	And Bob changed their email address after the order X had been made
-	When Admin Alice sends an email to the author of the order
-	Then Email will be sent to the new Bob's address
+	When Admin Alice checks order author's email
+	Then Email shown will be the new Bob's address
 
 
 	Scenario: User's reward points are altered (even values)

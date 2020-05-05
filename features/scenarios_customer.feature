@@ -30,8 +30,9 @@ Feature: User Performs common use cases
 
 	Scenario: Purchase a Gift Certificate
 
-	Given Purchase a Gift Certificate page is open
+	Given Registered user has opened the Purchase a Gift Certificate page
 	When Gift certificate purchase Form is filled and submitted
 	Then User is redirected back to the store
-	And Admin Gift Vouchers section will show the gift certificate
+	# And Admin Gift Vouchers section will show the gift certificate
+
 	# And Gift certificate will be sent to recipient's email
