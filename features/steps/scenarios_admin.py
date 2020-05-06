@@ -1,3 +1,5 @@
+import sys
+
 from behave import *
 
 from features.steps.scenarios_customer import Patiently
@@ -13,12 +15,18 @@ from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 
-
 # don't use regex matching?
 # use_step_matcher("re")
 
 main_page_admin_url = "http://pat.fit.vutbr.cz:8072/admin/index.php"
 user_email_new = ""
+
+# There are two scenarios for testing user reward points changes
+user_points_before_1 = 0
+user_points_before_2 = 0
+
+# points added to user
+K_points = 2147483648  # 1 + maximum Int32 value
 
 
 def ensure_admin_logged_in(context):
@@ -171,15 +179,15 @@ def step_impl(context):
 
     try:
         for elem in elements:
-            curr_elem = (elem[0], elem[1])
+            elem_locator = (elem[0], elem[1])
             if elem[2] == click:
-                curr_elem = wait.until(EC.element_to_be_clickable(curr_elem))
+                curr_elem = wait.until(EC.element_to_be_clickable(elem_locator))
                 curr_elem.click()
             elif elem[2] == send_keys:
-                curr_elem = wait.until(EC.visibility_of_element_located(curr_elem))
+                curr_elem = wait.until(EC.visibility_of_element_located(elem_locator))
                 curr_elem.send_keys(elem[3])
             elif elem[2] == clear:
-                curr_elem = wait.until(EC.visibility_of_element_located(curr_elem))
+                curr_elem = wait.until(EC.visibility_of_element_located(elem_locator))
                 curr_elem.clear()
     except Exception as exc:
         raise exc
@@ -214,15 +222,32 @@ def step_impl(context):
     elem_email = context.browser.find_element(By.CSS_SELECTOR, "tr:nth-child(3) a")
     if elem_email.text != user_email_new:
         if elem_email.text == user_email_registered:
-            raise Exception("original email address did not get changed\n"
-                            "    expected '{}', actual '{}'".format(user_email_new, elem_email.text))
+            assert False, "original email address did not get changed\n"\
+                            "    expected '{}', actual '{}'".format(user_email_new, elem_email.text)
         else:
-            raise Exception("invalid email - neither the expected not the original address\n"
-                            "    expected '{}', actual '{}'".format(user_email_new, elem_email.text))
+            assert False, "invalid email - neither the expected not the original address\n"\
+                            "    expected '{}', actual '{}'".format(user_email_new, elem_email.text)
 
 
 # =======================================================
 #  User's reward points are altered (even values)
+def get_user_reward_points(context):
+    """
+    Must be called when on reward points page
+    :param context:
+    :return:
+    """
+    try:
+        elem = context.browser.find_element(By.XPATH, "(//div[@id='reward']/div/table/tbody/tr)[last()]")
+        balance_text_split = elem.text.split(' ')
+
+        assert balance_text_split[0] == "Balance", "Could not read user reward points balance"
+
+        points = int(balance_text_split[1])
+        print("Bob has", points, "points")
+        return points
+    except Exception:
+        raise
 
 
 @given("Admin Alice has opened Registered User's (Bob's) Reward points balance")
@@ -230,7 +255,34 @@ def step_impl(context):
     """
     :type context: behave.runner.Context
     """
-    raise NotImplementedError(u"STEP: Given Admin Alice has opened Registered User's (Bob's) Reward points balance")
+    context.browser.get(main_page_admin_url)
+
+    ensure_admin_logged_in(context)
+
+    elements = [
+        (By.CSS_SELECTOR, ".fa-indent", click, None),
+        (By.CSS_SELECTOR, "#customer span", click, None),
+        (By.CSS_SELECTOR, ".in > li:nth-child(1) > a", click, None),
+        (By.CSS_SELECTOR, "tr:nth-child(1) .btn-primary", click, None),
+        (By.LINK_TEXT, "Reward Points", click, None),
+    ]
+
+    wait = Patiently.wait(context.browser)
+
+    try:
+        for elem in elements:
+            elem_locator = (elem[0], elem[1])
+            if elem[2] == click:
+                curr_elem = wait.until(EC.element_to_be_clickable(elem_locator))
+                curr_elem.click()
+            elif elem[2] == send_keys:
+                curr_elem = wait.until(EC.visibility_of_element_located(elem_locator))
+                curr_elem.send_keys(elem[3])
+            elif elem[2] == clear:
+                curr_elem = wait.until(EC.visibility_of_element_located(elem_locator))
+                curr_elem.clear()
+    except Exception as exc:
+        raise
 
 
 @when("Alice gives Bob K points")
@@ -238,7 +290,33 @@ def step_impl(context):
     """
     :type context: behave.runner.Context
     """
-    raise NotImplementedError(u'STEP: When Alice gives Bob K points')
+    global user_points_before_1
+    user_points_before_1 = get_user_reward_points(context)
+
+    elements = [
+        # (By.ID, "input-points", click, None),
+        (By.ID, "input-points", send_keys, str(K_points)),
+        (By.ID, "button-reward", click, None),
+    ]
+
+    wait = Patiently.wait(context.browser)
+
+    try:
+        for elem in elements:
+            elem_locator = (elem[0], elem[1])
+            if elem[2] == click:
+                curr_elem = wait.until(EC.element_to_be_clickable(elem_locator))
+                curr_elem.click()
+            elif elem[2] == send_keys:
+                curr_elem = wait.until(EC.visibility_of_element_located(elem_locator))
+                curr_elem.send_keys(elem[3])
+            elif elem[2] == clear:
+                curr_elem = wait.until(EC.visibility_of_element_located(elem_locator))
+                curr_elem.clear()
+    except Exception as exc:
+        raise
+
+    print("added", K_points)
 
 
 @step("Alice gives Bob -(K/2) points")
@@ -246,15 +324,43 @@ def step_impl(context):
     """
     :type context: behave.runner.Context
     """
-    raise NotImplementedError(u'STEP: And Alice gives Bob -(K/2) points')
+    elements = [
+        # (By.ID, "input-points", click, None),
+        (By.ID, "input-points", send_keys, "{0:d}".format(-K_points // 2)),
+        (By.ID, "button-reward", click, None),
+    ]
+
+    wait = Patiently.wait(context.browser)
+
+    try:
+        for elem in elements:
+            elem_locator = (elem[0], elem[1])
+            if elem[2] == click:
+                curr_elem = wait.until(EC.element_to_be_clickable(elem_locator))
+                curr_elem.click()
+            elif elem[2] == send_keys:
+                curr_elem = wait.until(EC.visibility_of_element_located(elem_locator))
+                curr_elem.send_keys(elem[3])
+            elif elem[2] == clear:
+                curr_elem = wait.until(EC.visibility_of_element_located(elem_locator))
+                curr_elem.clear()
+    except Exception as exc:
+        raise
+
+    print("subtracted {0:d}".format(-K_points // 2))
 
 
 @then("Bob's points will be at their previous value")
 def step_impl(context):
     """
+    @precondition: Loaded page is 'View user reward points'
     :type context: behave.runner.Context
     """
-    raise NotImplementedError(u"STEP: Then Bob's points will be at their previous value")
+    user_points_after = get_user_reward_points(context)
+
+    diff = user_points_after - user_points_before_1
+
+    assert diff == 0, "Bob's points differ by '{}', expected difference '{}'".format(diff, 0)
 
 
 # ======================================================
@@ -269,7 +375,33 @@ def step_impl(context):
     """
     :type context: behave.runner.Context
     """
-    raise NotImplementedError(u'STEP: When Alice gives Bob K (K > INT_MAX) points')
+    global user_points_before_1
+    user_points_before_1 = get_user_reward_points(context)
+
+    elements = [
+        # (By.ID, "input-points", click, None),
+        (By.ID, "input-points", send_keys, str(K_points)),
+        (By.ID, "button-reward", click, None),
+    ]
+
+    wait = Patiently.wait(context.browser)
+
+    try:
+        for elem in elements:
+            elem_locator = (elem[0], elem[1])
+            if elem[2] == click:
+                curr_elem = wait.until(EC.element_to_be_clickable(elem_locator))
+                curr_elem.click()
+            elif elem[2] == send_keys:
+                curr_elem = wait.until(EC.visibility_of_element_located(elem_locator))
+                curr_elem.send_keys(elem[3])
+            elif elem[2] == clear:
+                curr_elem = wait.until(EC.visibility_of_element_located(elem_locator))
+                curr_elem.clear()
+    except Exception as exc:
+        raise
+
+    print("added", K_points)
 
 
 @then("Bob's points will be equal to (K plus his previous points balance)")
@@ -277,6 +409,9 @@ def step_impl(context):
     """
     :type context: behave.runner.Context
     """
-    raise NotImplementedError(u"STEP: Then Bob's points will be equal to (K + his previous points balance)")
+    user_points_after = get_user_reward_points(context)
 
+    diff = user_points_after - user_points_before_1
 
+    assert diff == K_points, "Bob's points differ by '{}', expected difference '{}'" \
+        .format(diff, K_points)

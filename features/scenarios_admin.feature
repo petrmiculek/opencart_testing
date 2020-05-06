@@ -44,5 +44,4 @@ Feature: Admin performs various use cases
 	Given Admin Alice has opened Registered User's (Bob's) Reward points balance
 	When Alice gives Bob K (K > INT_MAX) points
 	Then Bob's points will be equal to (K plus his previous points balance)
-	
 	# or Error about input validation will be shown (which there isn't any)

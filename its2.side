@@ -2,7 +2,7 @@
   "id": "81102525-a7f9-41e5-b37b-fb1f71573bd9",
   "version": "2.0",
   "name": "its2",
-  "url": "https://demo.opencart.com/",
+  "url": "http://pat.fit.vutbr.cz:8072/admin/index.php",
   "tests": [{
     "id": "d0777336-e08b-4f90-81c3-a5d72dac6479",
     "name": "failed",
@@ -2138,6 +2138,216 @@
       "command": "close",
       "target": "",
       "targets": [],
+      "value": ""
+    }]
+  }, {
+    "id": "d6d86d9f-583a-453c-abb9-9ef132503f1f",
+    "name": "Admin open user points",
+    "commands": [{
+      "id": "550aaf36-d2c6-4049-8e86-2eaa522ac6c8",
+      "comment": "",
+      "command": "open",
+      "target": "http://pat.fit.vutbr.cz:8072/admin/index.php",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "9e951b86-9388-4821-8cc4-eadbcaf56b49",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "800x800",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "833c2c18-6189-4b66-b1cb-b3dad7e516c9",
+      "comment": "",
+      "command": "click",
+      "target": "id=input-username",
+      "targets": [
+        ["id=input-username", "id"],
+        ["name=username", "name"],
+        ["css=#input-username", "css:finder"],
+        ["xpath=//input[@id='input-username']", "xpath:attributes"],
+        ["xpath=//div[@id='content']/div/div/div/div/div[2]/form/div/div/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "fe7ecc3e-8f9b-4524-a635-21a59549f96e",
+      "comment": "",
+      "command": "type",
+      "target": "id=input-username",
+      "targets": [
+        ["id=input-username", "id"],
+        ["name=username", "name"],
+        ["css=#input-username", "css:finder"],
+        ["xpath=//input[@id='input-username']", "xpath:attributes"],
+        ["xpath=//div[@id='content']/div/div/div/div/div[2]/form/div/div/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": "admin"
+    }, {
+      "id": "061da0c4-4484-4372-a2f2-8b78843a12e9",
+      "comment": "",
+      "command": "type",
+      "target": "id=input-password",
+      "targets": [
+        ["id=input-password", "id"],
+        ["name=password", "name"],
+        ["css=#input-password", "css:finder"],
+        ["xpath=//input[@id='input-password']", "xpath:attributes"],
+        ["xpath=//div[@id='content']/div/div/div/div/div[2]/form/div[2]/div/input", "xpath:idRelative"],
+        ["xpath=//div[2]/div/input", "xpath:position"]
+      ],
+      "value": "admin"
+    }, {
+      "id": "d954357d-665a-4c3f-9a59-ff9c9c012d63",
+      "comment": "",
+      "command": "click",
+      "target": "css=.btn",
+      "targets": [
+        ["css=.btn", "css:finder"],
+        ["xpath=//button[@type='submit']", "xpath:attributes"],
+        ["xpath=//div[@id='content']/div/div/div/div/div[2]/form/div[3]/button", "xpath:idRelative"],
+        ["xpath=//button", "xpath:position"],
+        ["xpath=//button[contains(.,' Login')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "029d5ae9-57a6-4288-bcf6-34ba8db8a17e",
+      "comment": "",
+      "command": "click",
+      "target": "css=.fa-indent",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "202f5192-2d6e-4da7-aa08-3a8fce1b470b",
+      "comment": "",
+      "command": "click",
+      "target": "css=#customer span",
+      "targets": [
+        ["css=#customer span", "css:finder"],
+        ["xpath=//li[@id='customer']/a/span", "xpath:idRelative"],
+        ["xpath=//li[6]/a/span", "xpath:position"],
+        ["xpath=//span[contains(.,'Customers')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "e6e568fd-7995-444d-aba5-6c362ef70a4b",
+      "comment": "",
+      "command": "click",
+      "target": "css=.in > li:nth-child(1) > a",
+      "targets": [
+        ["css=.in > li:nth-child(1) > a", "css:finder"],
+        ["xpath=(//a[contains(text(),'Customers')])[2]", "xpath:link"],
+        ["xpath=//li[@id='customer']/ul/li/a", "xpath:idRelative"],
+        ["xpath=//a[@href='http://pat.fit.vutbr.cz:8072/admin/index.php?route=customer/customer&token=xa85fAWsaGxNZMGlxPxNhitFgq1c0ieC']", "xpath:href"],
+        ["xpath=//li[6]/ul/li/a", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "69502c70-42a5-4628-8103-67f771838280",
+      "comment": "",
+      "command": "click",
+      "target": "css=tr:nth-child(1) .btn-primary",
+      "targets": [
+        ["css=tr:nth-child(1) .btn-primary", "css:finder"],
+        ["xpath=//form[@id='form-customer']/div/table/tbody/tr/td[8]/a", "xpath:idRelative"],
+        ["xpath=//a[@href='http://pat.fit.vutbr.cz:8072/admin/index.php?route=customer/customer/edit&token=ha2V27okllsVj9JyqUOn03HD1gr9AfLg&customer_id=2']", "xpath:href"],
+        ["xpath=//td[8]/a", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "e079f680-b256-4756-b59b-8cf0ba3cc9c4",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Reward Points",
+      "targets": [
+        ["linkText=Reward Points", "linkText"],
+        ["css=.nav-tabs > li:nth-child(4) > a", "css:finder"],
+        ["xpath=(//a[contains(text(),'Reward Points')])[2]", "xpath:link"],
+        ["xpath=//form[@id='form-customer']/ul/li[4]/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '#tab-reward')]", "xpath:href"],
+        ["xpath=//form/ul/li[4]/a", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "d17526c0-42fa-4798-8e77-b5cb4a3d4f8e",
+      "comment": "",
+      "command": "click",
+      "target": "id=input-points",
+      "targets": [
+        ["id=input-points", "id"],
+        ["name=points", "name"],
+        ["css=#input-points", "css:finder"],
+        ["xpath=//input[@id='input-points']", "xpath:attributes"],
+        ["xpath=//div[@id='tab-reward']/div[3]/div/input", "xpath:idRelative"],
+        ["xpath=//div[4]/div[3]/div/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "d59c74c8-b0b8-4a11-8343-73f197bf88f1",
+      "comment": "",
+      "command": "type",
+      "target": "id=input-points",
+      "targets": [
+        ["id=input-points", "id"],
+        ["name=points", "name"],
+        ["css=#input-points", "css:finder"],
+        ["xpath=//input[@id='input-points']", "xpath:attributes"],
+        ["xpath=//div[@id='tab-reward']/div[3]/div/input", "xpath:idRelative"],
+        ["xpath=//div[4]/div[3]/div/input", "xpath:position"]
+      ],
+      "value": "456"
+    }, {
+      "id": "e1ce263e-bca3-4a76-9093-2bd8a16486ef",
+      "comment": "",
+      "command": "click",
+      "target": "id=button-reward",
+      "targets": [
+        ["id=button-reward", "id"],
+        ["css=#button-reward", "css:finder"],
+        ["xpath=//button[@id='button-reward']", "xpath:attributes"],
+        ["xpath=//div[@id='tab-reward']/div[4]/button", "xpath:idRelative"],
+        ["xpath=//div[4]/div[4]/button", "xpath:position"],
+        ["xpath=//button[contains(.,' Add Reward Points')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "a00181e1-6bb3-4603-bbb4-0315a7afa070",
+      "comment": "",
+      "command": "click",
+      "target": "css=.pull-right > .btn-primary",
+      "targets": [
+        ["css=.pull-right > .btn-primary", "css:finder"],
+        ["xpath=//button[@type='submit']", "xpath:attributes"],
+        ["xpath=//div[@id='content']/div/div/div/button", "xpath:idRelative"],
+        ["xpath=//button", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "9f600353-e94b-4099-ab80-f8199424c149",
+      "comment": "",
+      "command": "click",
+      "target": "css=tr:nth-child(1) .btn-primary > .fa",
+      "targets": [
+        ["css=tr:nth-child(1) .btn-primary > .fa", "css:finder"],
+        ["xpath=//form[@id='form-customer']/div/table/tbody/tr/td[8]/a/i", "xpath:idRelative"],
+        ["xpath=//td[8]/a/i", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "8f404c8c-7cfe-4895-80e2-9a62d331f48e",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Reward Points",
+      "targets": [
+        ["linkText=Reward Points", "linkText"],
+        ["css=.nav-tabs > li:nth-child(4) > a", "css:finder"],
+        ["xpath=(//a[contains(text(),'Reward Points')])[2]", "xpath:link"],
+        ["xpath=//form[@id='form-customer']/ul/li[4]/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '#tab-reward')]", "xpath:href"],
+        ["xpath=//form/ul/li[4]/a", "xpath:position"]
+      ],
       "value": ""
     }]
   }],
