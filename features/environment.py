@@ -9,11 +9,9 @@ def before_all(context):
     firefox_profile = webdriver.FirefoxProfile()
     firefox_profile.set_preference("browser.privatebrowsing.autostart", True)
 
-    """
     context.browser = webdriver.Remote(
                     command_executor='http://mys01.fit.vutbr.cz:4444/wd/hub',
                     desired_capabilities=dp)
-    """
 
     context.browser.implicitly_wait(15)
     context.browser.set_window_size(800, 800)

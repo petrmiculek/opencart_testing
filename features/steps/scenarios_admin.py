@@ -284,20 +284,25 @@ def get_user_reward_points(context):
     :param context:
     :return:
     """
-    try:
-        elem = context.browser.find_element(By.XPATH, "(//div[@id='reward']/div/table/tbody/tr)[last()]")
-        balance_text_split = elem.text.split(' ')
+    tries_counter = 0
+    succeeded = False
+    balance_text_split = []
+    while tries_counter < 3 and not succeeded:
+        try:
+            elem = context.browser.find_element(By.XPATH, "(//div[@id='reward']/div/table/tbody/tr)[last()]")
+            balance_text_split = elem.text.split(' ')
+            succeeded = True
+        except Exception:
+            tries_counter += 1
 
-        if balance_text_split[0] != "Balance":
-            # No Reward points history for given user -> no rows
-            return 0
-            # this may hide possible future errors (page layout changes)
+    if balance_text_split[0] != "Balance":
+        # No Reward points history for given user -> no rows
+        return 0
+        # this may hide possible future errors (page layout changes)
 
-        points = int(balance_text_split[1])
-        print("Bob has", points, "points")
-        return points
-    except Exception:
-        raise
+    points = int(balance_text_split[1])
+    print("Bob has", points, "points")
+    return points
 
 
 @given("Admin Alice has opened Registered User's (Bob's) Reward points balance")
