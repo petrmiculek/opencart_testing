@@ -25,8 +25,10 @@ def before_all(context):
     """
     # main_page_url = 'http://pat.fit.vutbr.cz:8072/'
 
-    context.browser.implicitly_wait(100)
+    context.browser.implicitly_wait(10)
     context.browser.get(main_page_url)
+    context.browser.set_window_size(800, 800)
+    # context.browser.manage().timeouts().pageLoadTimeout()
 
 
 def after_all(context):

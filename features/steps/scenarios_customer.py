@@ -8,6 +8,9 @@ from selenium.webdriver.support import expected_conditions as EC
 main_page_url = "http://pat.fit.vutbr.cz:8072"
 # main_page_url = "https://demo.opencart.com/"  # testing on public demo
 user_email_registered = "petr.miculek@gmail.com"
+user_password_registered = "verysecurepassword"
+
+user_registered = True  # False todo
 
 orders_count = 0
 
@@ -19,7 +22,6 @@ clear = 2
 
 # don't worry about the name, it will all make sense later
 class Patiently:
-
     delay = 15  # seconds, hopefully; for explicit waiting on element loading
     wait_var = None
 
@@ -38,20 +40,35 @@ def ensure_user_logged_in(context):
     context.browser.find_element(By.CSS_SELECTOR, ".fa-user").click()
 
     try:
-        context.browser.find_element(By.LINK_TEXT, "Login").click()
+        login_link = context.browser.find_element(By.LINK_TEXT, "Login")
+        login_link.click()
     except NoSuchElementException:
         # already logged in
         return
 
-    context.browser.find_element(By.ID, "input-email").click()
+    elements = [
+        (By.ID, "input-email", send_keys, user_email_registered),
+        (By.ID, "input-password", send_keys, user_password_registered),
+        (By.XPATH, "//input[@value=\'Login\']", click, None),
+        (By.CSS_SELECTOR, ".fa-home", click, None)
+    ]
 
-    context.browser.find_element(By.ID, "input-email").send_keys(user_email_registered)
+    wait = Patiently.wait(context.browser)
 
-    context.browser.find_element(By.ID, "input-password").send_keys("verysecurepassword")
-
-    context.browser.find_element(By.XPATH, "//input[@value=\'Login\']").click()
-
-    context.browser.find_element(By.CSS_SELECTOR, ".fa-home").click()
+    try:
+        for elem in elements:
+            curr_elem = (elem[0], elem[1])
+            if elem[2] == click:
+                curr_elem = wait.until(EC.element_to_be_clickable(curr_elem))
+                curr_elem.click()
+            elif elem[2] == send_keys:
+                curr_elem = wait.until(EC.visibility_of_element_located(curr_elem))
+                curr_elem.send_keys(elem[3])
+            elif elem[2] == clear:
+                curr_elem = wait.until(EC.visibility_of_element_located(curr_elem))
+                curr_elem.clear()
+    except Exception as exc:
+        raise Exception("Could not log in")
 
 
 def count_user_orders(context):
@@ -69,7 +86,7 @@ def count_user_orders(context):
 
     try:
         for elem in elements:
-            curr_elem = wait.until(EC.visibility_of_element_located(elem))
+            curr_elem = wait.until(EC.element_to_be_clickable(elem))
             curr_elem.click()
     except Exception as exc:
         pass
@@ -98,6 +115,75 @@ def count_user_orders(context):
 
     except NoSuchElementException:
         return 0
+    except Exception:
+        raise
+
+
+def ensure_user_registered(context):
+
+    global user_registered
+
+    if user_registered:
+        return
+
+    context.browser.get(main_page_url)
+
+    context.browser.find_element(By.CSS_SELECTOR, ".list-inline .dropdown-toggle").click()
+
+    try:
+        context.browser.find_element(By.LINK_TEXT, "Register").click()
+    except NoSuchElementException:
+        # logged in, cannot register
+        return
+
+    elements = [
+
+        (By.ID, "input-firstname", send_keys, "Name"),
+        (By.ID, "input-lastname", send_keys, "Surname"),
+        # (By.ID, "input-email", click, None),
+        (By.ID, "input-email", send_keys, user_email_registered),
+        # (By.ID, "input-telephone", click, None),
+        (By.ID, "input-telephone", send_keys, "731731390"),
+        # (By.ID, "input-address-1", click, None),
+        (By.ID, "input-address-1", send_keys, "Street"),
+        # (By.ID, "input-city", click, None),
+        (By.ID, "input-city", send_keys, "Brno"),
+        (By.ID, "input-postcode", click, None),
+        (By.CSS_SELECTOR, ".row:nth-child(2)", click, None),
+        (By.ID, "input-country", click, None),
+        (By.CSS_SELECTOR, "option:nth-child(62)", click, None),
+        (By.ID, "input-zone", click, None),
+        (By.CSS_SELECTOR, "#input-zone > option:nth-child(3)", click, None),
+        (By.CSS_SELECTOR, ".row:nth-child(2)", click, None),
+        # (By.ID, "input-password", click, None),
+        (By.ID, "input-password", send_keys, user_password_registered),
+        # (By.ID, "input-confirm", click, None),
+        (By.ID, "input-confirm", send_keys, user_password_registered),
+        (By.CSS_SELECTOR, ".row:nth-child(2)", click, None),
+        (By.NAME, "agree", click, None),
+        (By.CSS_SELECTOR, ".btn-primary", click, None),
+        (By.LINK_TEXT, "Continue", click, None),
+
+    ]
+
+    wait = Patiently.wait(context.browser)
+    try:
+        for elem in elements:
+            curr_elem = (elem[0], elem[1])
+            if elem[2] == click:
+                curr_elem = wait.until(EC.element_to_be_clickable(curr_elem))
+                curr_elem.click()
+            elif elem[2] == send_keys:
+                curr_elem = wait.until(EC.visibility_of_element_located(curr_elem))
+                curr_elem.send_keys(elem[3])
+            elif elem[2] == clear:
+                curr_elem = wait.until(EC.visibility_of_element_located(curr_elem))
+                curr_elem.clear()
+    except Exception as exc:
+        pass
+
+    user_registered = True
+    print("HellNo")
 
 
 def ensure_user_logged_out(context):
@@ -122,13 +208,7 @@ def step_impl(context):
     """
     context.browser.get(main_page_url)  # already done by setup
 
-    """
-    # verify it's the main page - no benefit
-    title = context.browser.find_element_by_xpath('/html/head/title')
-
-    expected_title = 'My Store'
-    assert title == expected_title, "Expected = {0}, Real = {1}".format(expected_title, title)
-    """
+    ensure_user_registered(context)
 
 
 @when("{} is searched for")  # <existing product>
@@ -142,8 +222,6 @@ def step_impl(context, product_name):
     context.browser.find_element(By.NAME, "search").send_keys(product_name)
     context.browser.find_element(By.CSS_SELECTOR, ".fa-search").click()
 
-    # raise NotImplementedError(u'STEP: When <existing product> is searched for')
-
 
 @then("Results will contain {}")  # <existing product>
 def step_impl(context, product_name):
@@ -156,9 +234,6 @@ def step_impl(context, product_name):
 
     assert url == expected_url, "Expected URL: '{}', Actual URL: '{}'".format(expected_url, url)
 
-    # potentially also test contents of page
-    # raise NotImplementedError(u'STEP: Then Results will contain <existing product>')
-
 
 # ===========================================================================
 #  Scenario: Order gets added to Order History (Registered user)
@@ -169,7 +244,7 @@ def step_impl(context):
     """
     :type context: behave.runner.Context
     """
-    ensure_user_logged_in(context)
+    # ensure_user_logged_in(context)
 
     global orders_count
     orders_count = count_user_orders(context)
@@ -349,8 +424,6 @@ def step_impl(context):
     :type context: behave.runner.Context
     """
 
-    wait = Patiently.wait(context.browser)
-
     elements = [
         (By.ID, "input-to-name", clear, None),
         (By.ID, "input-to-name", click, None),
@@ -378,8 +451,9 @@ def step_impl(context):
         (By.CSS_SELECTOR, ".pull-right:nth-child(1)", click, None),
         (By.NAME, "agree", click, None),
         (By.CSS_SELECTOR, ".btn-primary", click, None)
-
     ]
+
+    wait = Patiently.wait(context.browser)
     try:
         for elem in elements:
             curr_elem = (elem[0], elem[1])
