@@ -3,14 +3,12 @@ from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 
-# use_step_matcher("re")
-
 main_page_url = "http://pat.fit.vutbr.cz:8072"
-# main_page_url = "https://demo.opencart.com/"  # testing on public demo
 user_email_registered = "petr.miculek@gmail.com"
 user_password_registered = "verysecurepassword"
+user_full_name = "Name Surname"
 
-user_registered = True  # False todo
+user_registered = False
 
 orders_count = 0
 
@@ -20,12 +18,9 @@ send_keys = 1
 clear = 2
 
 
-# don't worry about the name, it will all make sense later
 class Patiently:
     delay = 15  # seconds, hopefully; for explicit waiting on element loading
     wait_var = None
-
-    # def __init__(self, context):
 
     @classmethod
     def wait(cls, browser):
@@ -36,6 +31,9 @@ class Patiently:
 
 
 def ensure_user_logged_in(context):
+    """
+    :type context: behave.runner.Context
+    """
     context.browser.get(main_page_url)
     context.browser.find_element(By.CSS_SELECTOR, ".fa-user").click()
 
@@ -72,14 +70,15 @@ def ensure_user_logged_in(context):
 
 
 def count_user_orders(context):
+    """
+    :type context: behave.runner.Context
+    """
     wait = Patiently().wait(context.browser)
     ensure_user_logged_in(context)
 
     context.browser.get(main_page_url)
 
     elements = [
-        # (By.CSS_SELECTOR, ".list-inline .dropdown-toggle"),  # ".fa-user"
-        # (By.CSS_SELECTOR, ".dropdown-menu > li:nth-child(2) > a"),
         (By.XPATH, "//div[@id=\'top-links\']/ul/li[2]/a/span[2]"),
         (By.XPATH, "//div[@id=\'top-links\']/ul/li[2]/ul/li[2]/a"),
     ]
@@ -91,21 +90,7 @@ def count_user_orders(context):
     except Exception as exc:
         pass
     pass
-    """
-    count = 0
-    try:
-        while count <= 1000:  # arbitraty limit
 
-            # count lines of table == orders
-            css_text = "tr:nth-child({})".format(count + 1)
-            context.browser.find_element(By.CSS_SELECTOR, css_text).click()
-
-            count += 1
-
-    except NoSuchElementException:
-        # once the total orders amount is exceeded, return it
-        return count
-    """
     try:
         # also works but decided against using it
         # row_list = context.browser.find_elements(By.XPATH, "//div[@id=\'content\']/div/table/tbody/tr")
@@ -120,7 +105,9 @@ def count_user_orders(context):
 
 
 def ensure_user_registered(context):
-
+    """
+    :type context: behave.runner.Context
+    """
     global user_registered
 
     if user_registered:
@@ -140,13 +127,9 @@ def ensure_user_registered(context):
 
         (By.ID, "input-firstname", send_keys, "Name"),
         (By.ID, "input-lastname", send_keys, "Surname"),
-        # (By.ID, "input-email", click, None),
         (By.ID, "input-email", send_keys, user_email_registered),
-        # (By.ID, "input-telephone", click, None),
         (By.ID, "input-telephone", send_keys, "731731390"),
-        # (By.ID, "input-address-1", click, None),
         (By.ID, "input-address-1", send_keys, "Street"),
-        # (By.ID, "input-city", click, None),
         (By.ID, "input-city", send_keys, "Brno"),
         (By.ID, "input-postcode", click, None),
         (By.CSS_SELECTOR, ".row:nth-child(2)", click, None),
@@ -155,9 +138,7 @@ def ensure_user_registered(context):
         (By.ID, "input-zone", click, None),
         (By.CSS_SELECTOR, "#input-zone > option:nth-child(3)", click, None),
         (By.CSS_SELECTOR, ".row:nth-child(2)", click, None),
-        # (By.ID, "input-password", click, None),
         (By.ID, "input-password", send_keys, user_password_registered),
-        # (By.ID, "input-confirm", click, None),
         (By.ID, "input-confirm", send_keys, user_password_registered),
         (By.CSS_SELECTOR, ".row:nth-child(2)", click, None),
         (By.NAME, "agree", click, None),
@@ -187,6 +168,9 @@ def ensure_user_registered(context):
 
 
 def ensure_user_logged_out(context):
+    """
+    :type context: behave.runner.Context
+    """
     context.browser.find_element(By.CSS_SELECTOR, ".list-inline .dropdown-toggle").click()
 
     try:
@@ -206,9 +190,7 @@ def step_impl(context):
     """
     :type context: behave.runner.Context
     """
-    context.browser.get(main_page_url)  # already done by setup
-
-    ensure_user_registered(context)
+    context.browser.get(main_page_url)
 
 
 @when("{} is searched for")  # <existing product>
@@ -229,17 +211,20 @@ def step_impl(context, product_name):
     :type context: behave.runner.Context
     :type product_name: str
     """
-    expected_url = main_page_url + "/index.php?route=product/search&search=" + product_name
     url = context.browser.current_url
 
-    assert url == expected_url, "Expected URL: '{}', Actual URL: '{}'".format(expected_url, url)
+    url_product_independent = url[:url.find("&search=")]
+    expected_url_product_independent = main_page_url + "/index.php?route=product/search"
+
+    assert url_product_independent == expected_url_product_independent, "Expected URL: '{}',\n Actual URL: '{}'" \
+        .format(expected_url_product_independent, url_product_independent)
 
 
 # ===========================================================================
 #  Scenario: Order gets added to Order History (Registered user)
 
 
-@step("User has N orders in their Order History")
+@given("User has N orders in their Order History")
 def step_impl(context):
     """
     :type context: behave.runner.Context
@@ -293,36 +278,22 @@ def step_impl(context):
     """
     :type context: behave.runner.Context
     """
-    """
-    context.browser.get(main_page_url)
-    
-    elements = [
-        (By.CSS_SELECTOR, ".list-inline .dropdown-toggle"),
-        (By.CSS_SELECTOR, ".dropdown-menu > li:nth-child(2) > a"),
-    ]
-
-    try:
-        for elem in elements:
-            curr_elem = Patiently.wait().until(EC.element_to_be_clickable(elem))
-            curr_elem.click()
-    except Exception as exc:
-        pass
-    pass
-    """
-
-    # todo below
-    """
-    I cannot count the orders based on one table, as there might be more pages to the table
-    
-    The solution would be to generate a random string, put it as the order comment
-    and then check if it is there. (There is no better order attribute that guarantees
-    that the order is the one we have just made)
-    """
-
     new_orders = count_user_orders(context)
 
     assert new_orders - orders_count == 1, \
         "Creating an order resulted in {} new orders (there were {} before)".format(new_orders, orders_count)
+
+    """
+        There might be more pages to the table.
+        
+        The solution would be to generate a random string, put it as the order comment
+        and then check if it is there. (There is no better attribute that guarantees
+        that the order is the one we have just made)
+    """
+
+
+# =================================================================================
+#  Make an order with long note (Registered user)
 
 
 @given("There is a valid order form filled up to the Delivery Method step")

@@ -1,4 +1,7 @@
 import sys
+import time
+from time import sleep
+from zipfile import ZipFile
 
 from behave import *
 
@@ -6,6 +9,7 @@ from features.steps.scenarios_customer import Patiently
 from features.steps.scenarios_customer import ensure_user_logged_in
 from features.steps.scenarios_customer import user_email_registered
 from features.steps.scenarios_customer import main_page_url as main_page_user_url
+from features.steps.scenarios_customer import user_full_name
 
 from features.steps.scenarios_customer import click
 from features.steps.scenarios_customer import send_keys
@@ -76,37 +80,81 @@ def step_impl(context):
 #  Extension Installer Upload Interrupted
 
 
+def create_extension_like_file():
+    file_name = 'spam.zip'
+    try:
+        with ZipFile(file_name, 'w') as myzip:
+            myzip.write('eggs.txt')
+    except Exception:
+        return ""
+
+    return file_name
+
+
+"""
+# This scenario was not implemented
+# as I found no way to upload a file
+
 @given("Admin Alice is uploading an extension installer")
 def step_impl(context):
-    """
-    :type context: behave.runner.Context
-    """
-    raise NotImplementedError(u'STEP: Given Admin Alice is uploading an extension installer')
+
+    file_path = create_extension_like_file()
+
+    ensure_admin_logged_in(context)
+
+    elements = [
+        (By.CSS_SELECTOR, ".fa-indent", click, None),
+        (By.CSS_SELECTOR, "#extension span", click, None),
+        (By.LINK_TEXT, "Extension Installer", click, None),
+
+        # clicking on button-upload brings up local system window that selenium cannot interact with
+        # (By.ID, "button-upload", click, None),
+
+        # cannot send keys to this button
+        # (By.NAME, "button-upload", send_keys, file_path),
+
+        (By.NAME, "file", send_keys, file_path),
+
+        # logout
+        (By.CSS_SELECTOR, ".nav > li:nth-child(4) > a", click, None),
+    ]
+    
+    wait = Patiently.wait(context.browser)
+    try:
+        for elem in elements:
+            curr_elem = (elem[0], elem[1])
+            if elem[2] == click:
+                curr_elem = wait.until(EC.element_to_be_clickable(curr_elem))
+                curr_elem.click()
+            elif elem[2] == send_keys:
+                curr_elem = wait.until(EC.visibility_of_element_located(curr_elem))
+                curr_elem.send_keys(elem[3])
+            elif elem[2] == clear:
+                curr_elem = wait.until(EC.visibility_of_element_located(curr_elem))
+                curr_elem.clear()
+    except Exception as exc:
+        raise
+    print("ok")
 
 
 @when("Admin Alice logs out before the upload finishes And")
 def step_impl(context):
-    """
-    :type context: behave.runner.Context
-    """
+
     raise NotImplementedError(u'STEP: When Admin Alice logs out before the upload finishes And')
 
 
 @step("Admin Alice logs back in again")
 def step_impl(context):
-    """
-    :type context: behave.runner.Context
-    """
+
     raise NotImplementedError(u'STEP: And Admin Alice logs back in again')
 
 
 @then("Administration section Dashboard will be shown")
 def step_impl(context):
-    """
-    :type context: behave.runner.Context
-    """
+
     raise NotImplementedError(u'STEP: Then Administration section Dashboard will be shown')
 
+"""
 
 # =============================================================
 #  User information change is reflected in orders' view
@@ -199,7 +247,6 @@ def step_impl(context):
     """
     :type context: behave.runner.Context
     """
-    expected_user_name = "Name Surname"
     ensure_admin_logged_in(context)
 
     context.browser.find_element(By.CSS_SELECTOR, "tr:nth-child(1) .btn").click()
@@ -207,9 +254,9 @@ def step_impl(context):
     # name surname
     elem_name = context.browser.find_element(By.CSS_SELECTOR, ".col-md-4:nth-child(2) tr:nth-child(1) a")
 
-    if elem_name.text != expected_user_name:
+    if elem_name.text != user_full_name:
         raise Exception("name mismatch (internal error): expected '{}', actual: '{}'"
-                        .format(expected_user_name, elem_name.text))
+                        .format(user_full_name, elem_name.text))
 
 
 @then("Email shown will be the new Bob's address")
@@ -241,7 +288,10 @@ def get_user_reward_points(context):
         elem = context.browser.find_element(By.XPATH, "(//div[@id='reward']/div/table/tbody/tr)[last()]")
         balance_text_split = elem.text.split(' ')
 
-        assert balance_text_split[0] == "Balance", "Could not read user reward points balance"
+        if balance_text_split[0] != "Balance":
+            # No Reward points history for given user -> no rows
+            return 0
+            # this may hide possible future errors (page layout changes)
 
         points = int(balance_text_split[1])
         print("Bob has", points, "points")
@@ -259,8 +309,16 @@ def step_impl(context):
 
     ensure_admin_logged_in(context)
 
+    try:
+        hamburger_menu = context.browser.find_element(By.CSS_SELECTOR, ".fa-indent")
+        hamburger_menu.click()
+    except NoSuchElementException:
+        # Hamburger menu is a toggle (expanded, collapsed) that remembers the last state it was in (between sessions)
+        # I found no locator that would work in both states
+        pass
+
     elements = [
-        (By.CSS_SELECTOR, ".fa-indent", click, None),
+
         (By.CSS_SELECTOR, "#customer span", click, None),
         (By.CSS_SELECTOR, ".in > li:nth-child(1) > a", click, None),
         (By.CSS_SELECTOR, "tr:nth-child(1) .btn-primary", click, None),
@@ -282,6 +340,7 @@ def step_impl(context):
                 curr_elem = wait.until(EC.visibility_of_element_located(elem_locator))
                 curr_elem.clear()
     except Exception as exc:
+        time.sleep(5)
         raise
 
 
@@ -290,6 +349,7 @@ def step_impl(context):
     """
     :type context: behave.runner.Context
     """
+
     global user_points_before_1
     user_points_before_1 = get_user_reward_points(context)
 

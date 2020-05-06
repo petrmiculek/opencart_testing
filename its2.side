@@ -2349,6 +2349,173 @@
         ["xpath=//form/ul/li[4]/a", "xpath:position"]
       ],
       "value": ""
+    }, {
+      "id": "51e0f4d0-ed48-4d3c-92b5-3350fb44f2c2",
+      "comment": "",
+      "command": "click",
+      "target": "css=html body.vsc-initialized div#container div#content div.container-fluid div.panel.panel-default div.panel-body form#form-customer.form-horizontal div.tab-content div#tab-reward.tab-pane.active div#reward div.table-responsive table.table.table-bordered.table-hover",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "0e6b7736-b78e-4648-b584-ccdbf4ecbf8d",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//div[@id='reward']/div/table/tbody/tr[7]/td[3]",
+      "targets": [
+        ["css=tr:nth-child(7) > .text-right:nth-child(3)", "css:finder"],
+        ["xpath=//div[@id='reward']/div/table/tbody/tr[7]/td[3]", "xpath:idRelative"],
+        ["xpath=//tr[7]/td[3]", "xpath:position"],
+        ["xpath=//td[contains(.,'500566065')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }]
+  }, {
+    "id": "4423c130-957c-4c7a-bbbe-bfa474402e6a",
+    "name": "Admin upload extension",
+    "commands": [{
+      "id": "2969b2ed-87ac-483c-8441-af58368fe905",
+      "comment": "",
+      "command": "open",
+      "target": "http://pat.fit.vutbr.cz:8072/admin/index.php",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "efd13e3d-da23-4915-b0b9-f67260faade6",
+      "comment": "",
+      "command": "click",
+      "target": "id=input-username",
+      "targets": [
+        ["id=input-username", "id"],
+        ["name=username", "name"],
+        ["css=#input-username", "css:finder"],
+        ["xpath=//input[@id='input-username']", "xpath:attributes"],
+        ["xpath=//div[@id='content']/div/div/div/div/div[2]/form/div/div/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "000dd79c-dc1f-42ac-a31c-96e9c00aff6d",
+      "comment": "",
+      "command": "type",
+      "target": "id=input-username",
+      "targets": [
+        ["id=input-username", "id"],
+        ["name=username", "name"],
+        ["css=#input-username", "css:finder"],
+        ["xpath=//input[@id='input-username']", "xpath:attributes"],
+        ["xpath=//div[@id='content']/div/div/div/div/div[2]/form/div/div/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": "admin"
+    }, {
+      "id": "f1a0ab1c-0b20-4136-a19c-9d18abf42273",
+      "comment": "",
+      "command": "click",
+      "target": "id=input-password",
+      "targets": [
+        ["id=input-password", "id"],
+        ["name=password", "name"],
+        ["css=#input-password", "css:finder"],
+        ["xpath=//input[@id='input-password']", "xpath:attributes"],
+        ["xpath=//div[@id='content']/div/div/div/div/div[2]/form/div[2]/div/input", "xpath:idRelative"],
+        ["xpath=//div[2]/div/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "0f4fdc99-dbf1-4c35-a1a1-67c4fd921cb6",
+      "comment": "",
+      "command": "type",
+      "target": "id=input-password",
+      "targets": [
+        ["id=input-password", "id"],
+        ["name=password", "name"],
+        ["css=#input-password", "css:finder"],
+        ["xpath=//input[@id='input-password']", "xpath:attributes"],
+        ["xpath=//div[@id='content']/div/div/div/div/div[2]/form/div[2]/div/input", "xpath:idRelative"],
+        ["xpath=//div[2]/div/input", "xpath:position"]
+      ],
+      "value": "admin"
+    }, {
+      "id": "5f714dd4-c746-41ee-8a94-f8296f8b0bcb",
+      "comment": "",
+      "command": "click",
+      "target": "css=.btn",
+      "targets": [
+        ["css=.btn", "css:finder"],
+        ["xpath=//button[@type='submit']", "xpath:attributes"],
+        ["xpath=//div[@id='content']/div/div/div/div/div[2]/form/div[3]/button", "xpath:idRelative"],
+        ["xpath=//button", "xpath:position"],
+        ["xpath=//button[contains(.,' Login')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "1ba5fbce-bb0a-4869-a534-db732d2b61d8",
+      "comment": "",
+      "command": "//click",
+      "target": "css=.fa-indent",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "2b39be05-5783-403b-8919-dd2e549f1e5d",
+      "comment": "",
+      "command": "click",
+      "target": "css=#extension span",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "402819e6-2ac0-45ed-ba97-32de6a4f70e2",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Extension Installer",
+      "targets": [
+        ["linkText=Extension Installer", "linkText"],
+        ["css=.in > li:nth-child(1) > a", "css:finder"],
+        ["xpath=//a[contains(text(),'Extension Installer')]", "xpath:link"],
+        ["xpath=//li[@id='extension']/ul/li/a", "xpath:idRelative"],
+        ["xpath=//a[@href='http://pat.fit.vutbr.cz:8072/admin/index.php?route=extension/installer&token=Y7Jco2mt30Qh7UtmHwpWvqVh7P4jhuPJ']", "xpath:href"],
+        ["xpath=//nav/ul/li[3]/ul/li/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Extension Installer')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "26984a69-8a1b-44fa-b718-82fa0466d1e9",
+      "comment": "",
+      "command": "click",
+      "target": "id=button-upload",
+      "targets": [
+        ["id=button-upload", "id"],
+        ["css=#button-upload", "css:finder"],
+        ["xpath=//button[@id='button-upload']", "xpath:attributes"],
+        ["xpath=//div[@id='content']/div[2]/div/div[2]/form/div/div/button", "xpath:idRelative"],
+        ["xpath=//button", "xpath:position"],
+        ["xpath=//button[contains(.,' Upload')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "185b34cf-b259-4c03-8edb-ce37ba9c4983",
+      "comment": "",
+      "command": "type",
+      "target": "name=file",
+      "targets": [
+        ["name=file", "name"],
+        ["css=input", "css:finder"],
+        ["xpath=//input[@name='file']", "xpath:attributes"],
+        ["xpath=//form[@id='form-upload']/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": "C:\\fakepath\\test_file.ocmod.zip"
+    }, {
+      "id": "bd9142fd-8e8b-487b-b56d-ca616f736ce7",
+      "comment": "",
+      "command": "click",
+      "target": "css=.nav > li:nth-child(4) > a",
+      "targets": [
+        ["css=.nav > li:nth-child(4) > a", "css:finder"],
+        ["xpath=//header[@id='header']/ul/li[4]/a", "xpath:idRelative"],
+        ["xpath=//a[@href='http://pat.fit.vutbr.cz:8072/admin/index.php?route=common/logout&token=Y7Jco2mt30Qh7UtmHwpWvqVh7P4jhuPJ']", "xpath:href"],
+        ["xpath=//header/ul/li[4]/a", "xpath:position"]
+      ],
+      "value": ""
     }]
   }],
   "suites": [{

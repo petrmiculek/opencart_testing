@@ -1,10 +1,5 @@
-from behave import fixture, use_fixture
-
 from selenium import webdriver
-from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
-from selenium.webdriver.support.wait import WebDriverWait
-
-from features.steps.scenarios_customer import Patiently, main_page_url
+from features.steps.scenarios_customer import Patiently, main_page_url, ensure_user_registered, user_registered
 
 
 def before_all(context):
@@ -14,21 +9,16 @@ def before_all(context):
     firefox_profile = webdriver.FirefoxProfile()
     firefox_profile.set_preference("browser.privatebrowsing.autostart", True)
 
-    context.browser = webdriver.Remote(
-        command_executor='http://127.0.0.1:4444/wd/hub',  # todo change
-        desired_capabilities=dp)
-
     """
     context.browser = webdriver.Remote(
                     command_executor='http://mys01.fit.vutbr.cz:4444/wd/hub',
                     desired_capabilities=dp)
     """
-    # main_page_url = 'http://pat.fit.vutbr.cz:8072/'
 
-    context.browser.implicitly_wait(10)
-    context.browser.get(main_page_url)
+    context.browser.implicitly_wait(15)
     context.browser.set_window_size(800, 800)
-    # context.browser.manage().timeouts().pageLoadTimeout()
+
+    ensure_user_registered(context)
 
 
 def after_all(context):
